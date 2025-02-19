@@ -1,0 +1,146 @@
+body {
+  margin: 0;
+  padding: 10px;
+
+  background-color: #262626;
+
+  color: white;
+  font-size: 14px;
+  font-weight: 400;
+  font-weight: normal;
+  font-family: monospace;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+main {
+  gap: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  gap: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header img {
+  flex: 0 0 auto;
+
+  width: 50px;
+  height: 50px;
+
+  border-radius: 50px;
+}
+
+.heading {
+  text-align: center;
+}
+
+.anti-phishing {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+
+  width: 425px;
+  max-width: 425px;
+
+  margin-top: 20px;
+}
+
+.anti-phishing textarea {
+  flex: 1;
+
+  padding: 10px;
+
+  resize: vertical;
+}
+
+.anti-phishing button {
+  padding: 15px 20px;
+
+  border: none;
+  border-radius: 30px;
+  background: purple;
+
+  color: white;
+  cursor: pointer;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.anti-phishing button span {
+  line-height: 34px;
+}
+
+.anti-phishing button svg {
+  flex: 0 0 auto;
+
+  width: 30px;
+  height: 30px;
+
+  animation: animation-loading infinite 2s;
+}
+
+.anti-phishing button.loading {
+  opacity: .7;
+  point-events: none;
+}
+
+.anti-phishing button.loading span {
+  display: none;
+}
+
+.anti-phishing button:not(.loading) svg {
+  display: none;
+}
+
+.message {
+  gap: 10px;
+  display: flex;
+  align-items: center;
+
+  display: none;
+
+  padding: 15px 20px;
+
+  border-radius: 12px;
+
+  overflow: hidden;
+}
+
+.message svg {
+  flex: 0 0 auto;
+
+  width: 20px;
+  height: 20px;
+}
+
+.message.message--success {
+  background: #40a144;
+}
+
+.message.message--warning {
+  background: #d7850b;
+}
+
+body[data-status="success"] .message--success {
+  display: flex;
+}
+
+body[data-status="warning"] .message--warning {
+  display: flex;
+}
+
+@keyframes animation-loading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
