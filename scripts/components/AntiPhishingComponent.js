@@ -278,7 +278,7 @@ class AntiPhishingComponent extends Component {
   template() {
 	return `
 	  <div class="content">
-		Select a page segment and choose 'Anti-Phishing Check'		 from the context menu to verify security.
+		Select a page segment and choose 'Anti-Phishing Check' from the context menu to verify security.
 		<a href="${this.WHY_URL}" target="_blank">
 		  Why?
 		</a>
@@ -338,33 +338,30 @@ class AntiPhishingComponent extends Component {
    */
   onLoading() {
 	delete this.dataset.status;
-	/**
-	   * Sending POST request to the FastAPI server
-	   */
+	/*
+		Sending POST request to the FastAPI server
+	*/
 	fetch(this.API_URI, {
-	  method: 'POST',
-	  headers: {
+		method: 'POST',
+		headers: {
 		'Content-Type': 'application/json'
-	  },
-	  body: JSON.stringify({
-		content: document.getSelection()?.toString() ?? ''  // Extracting the selected text from the page
-	  })
+		},
+		body: JSON.stringify({
+		content: document.getSelection()?.toString() ?? '' // Extracting the selected text from the page
+		})
 	})
 	.then(res => res.json())
 	.then(data => {
-	  const isSave = data.prediction === 0;  // Assuming 0 means safe, 1 means phishing
+		const isSave = data.prediction === 0; // Assuming 0 means safe, 1 means phishing
 
-	  const detail = {
+		const detail = {
 		isSave: isSave,
 		message: isSave ? 'Low' : 'High'
-	  };
+		};
 
-	  // Simulate delay for demo purposes
-		//   setTimeout(() => {
-			document.dispatchEvent(new CustomEvent('AntiPhishingChecked', {
-			  detail
-			}));
-		//   }, 100);
+	document.dispatchEvent(new CustomEvent('AntiPhishingChecked', {
+		detail
+	}));
 	})
 	.catch(error => {
 	  console.error("Error while checking phishing:", error);
@@ -407,7 +404,7 @@ class AntiPhishingComponent extends Component {
 				<span class="title">[Analysis Results]</span>
 			</div>
 			<p class="description">
-				<p>Thank you for your input.</p>
+				<p>Thank you for your input.</p	>
 				<p>Analyzing... <span class="loading-spinner"></span></p>
 			</p>
 		</div>
@@ -434,7 +431,7 @@ class AntiPhishingComponent extends Component {
 					<p>Where would you like to go now?</p>
 				</div>
 				<div class="right-buttons">
-					<button class="back">[Back to menu]</button>
+					<button class="main-menu">[Main menu]</button>
 					<button class="quit">[Quit]</button>
 				</div>
 			</div>
@@ -442,7 +439,8 @@ class AntiPhishingComponent extends Component {
 
 		// Attach event listeners after rendering
 		this.root.querySelector(".close").addEventListener("click", () => this.onClose());
-		this.root.querySelector(".quit").addEventListener("click", () => this.onClose()); // Quit button does the same
+		this.root.querySelector(".quit").addEventListener("click", () => this.onClose());
+		this.root.querySelector(".main-menu").addEventListener("click", () => this.showMainMenu());
 
 	} catch (error) {
 		this.render(`
@@ -460,6 +458,30 @@ class AntiPhishingComponent extends Component {
 		this.root.querySelector(".close").addEventListener("click", () => this.onClose());
 	}
 }
+
+showMainMenu() {
+	this.render(`
+		<div class="model">
+			<div class="model-header">
+				<button class="close">&times;</button>
+				<span class="larger-text-tmp">[Main Screen]</span>
+			</div>
+			<div class="description">
+				<p>Good day to you. I am <span class="highlight">Lock</span>.</p>
+				<p>My assignment is to help you stay safe from social engineering attacks. Aside from a <span class="highlight">knowledge base</span> that I have prepared for you, I am also capable of analysing texts and determining the possibility of them being malicious.</p>
+				<p>Please, do keep in mind that I am a machine and I cannot perceive context, so I highly suggest you make use of both my analysis and the knowledge.</p>
+				<p>Where do you want to go now?</p>
+			</div>
+			<div class="right-buttons">
+				<button class="quit">[Quit]</button>
+			</div>
+		</div>
+	`);
+
+	this.root.querySelector(".close").addEventListener("click", () => this.onClose());
+	this.root.querySelector(".quit").addEventListener("click", () => this.onClose());
+}
+
 
 
 }

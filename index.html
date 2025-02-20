@@ -1,66 +1,32 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta http-equiv="Content-Security-Policy" content="trusted-types default;">
-  <meta name="description" content="Anti Phishing - Safe surfing in the network" />
-  <title>Anti Phishing</title>
-  <link rel="stylesheet" href="./css/style.css" />
-  <script defer src="./scripts/popup.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
+	<meta http-equiv="Content-Security-Policy" content="trusted-types default;">
+	<meta name="description" content="Anti Phishing - Safe surfing in the network" />
+	<title>Anti Phishing</title>
+	<link rel="stylesheet" href="./css/style.css" />
+	<script defer src="./scripts/popup.js"></script>
 </head>
 <body>
-  <div hidden>
-    <svg xmlns="http://www.w3.org/2000/svg">
-      <symbol id="loading" viewBox="0 0 16 16" fill="none">
-        <g fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
-          <path d="M8 1.5a6.5 6.5 0 100 13 6.5 6.5 0 000-13zM0 8a8 8 0 1116 0A8 8 0 010 8z" opacity=".2"/>
-          <path d="M7.25.75A.75.75 0 018 0a8 8 0 018 8 .75.75 0 01-1.5 0A6.5 6.5 0 008 1.5a.75.75 0 01-.75-.75z"/>
-        </g>
-      </symbol>
-      <symbol id="warning" viewBox="0 0 512 512" version="1.1">
-        <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-          <g id="add" fill="currentColor" transform="translate(32.000000, 42.666667)">
-            <path d="M246.312928,5.62892705 C252.927596,9.40873724 258.409564,14.8907053 262.189374,21.5053731 L444.667042,340.84129 C456.358134,361.300701 449.250007,387.363834 428.790595,399.054926 C422.34376,402.738832 415.04715,404.676552 407.622001,404.676552 L42.6666667,404.676552 C19.1025173,404.676552 7.10542736e-15,385.574034 7.10542736e-15,362.009885 C7.10542736e-15,354.584736 1.93772021,347.288125 5.62162594,340.84129 L188.099293,21.5053731 C199.790385,1.04596203 225.853517,-6.06216498 246.312928,5.62892705 Z M224,272 C208.761905,272 197.333333,283.264 197.333333,298.282667 C197.333333,313.984 208.415584,325.248 224,325.248 C239.238095,325.248 250.666667,313.984 250.666667,298.624 C250.666667,283.264 239.238095,272 224,272 Z M245.333333,106.666667 L202.666667,106.666667 L202.666667,234.666667 L245.333333,234.666667 L245.333333,106.666667 Z"></path>
-          </g>
-        </g>
-      </symbol>
-      <symbol id="secure" viewBox="0 0 24 24">
-        <path
-          d="M19.42,3.83,12.24,2h0A.67.67,0,0,0,12,2a.67.67,0,0,0-.2,0h0L4.58,3.83A2,2,0,0,0,3.07,5.92l.42,5.51a12,12,0,0,0,7.24,10.11l.88.38h0a.91.91,0,0,0,.7,0h0l.88-.38a12,12,0,0,0,7.24-10.11l.42-5.51A2,2,0,0,0,19.42,3.83ZM15.71,9.71l-4,4a1,1,0,0,1-1.42,0l-2-2a1,1,0,0,1,1.42-1.42L11,11.59l3.29-3.3a1,1,0,0,1,1.42,1.42Z"
-          fill="currentColor"
-        />
-      </symbol>
-    </svg>
-  </div>
-
-  <header class=header>
-    <img src="./extension.png" alt="Anti-Phishing Checking" />
-    <h4 class=heading>Anti-Phishing Checking</h4>
-  </header>
-  <div class="anti-phishing">
-    <div id="warning" class="message message--warning">
-      <svg>
-        <use xlink:href="#warning"></use>
-      </svg>
-      Warning: Potential phishing detected!
-    </div>
-    <div id="success" class="message message--success">
-      <svg>
-        <use xlink:href="#secure"></use>
-      </svg>
-      Content is safe.
-    </div>
-
-    <textarea id="field" rows="6" placeholder="Please enter text for checking"></textarea>
-    <button id="check">
-      <svg>
-        <use xlink:href="#loading"></use>
-      </svg>
-      <span>Check</span>
-    </button>
-  </div>
+	<div class="model">
+		<div class="model-header">
+			<button class="close">&times;</button>
+			<span class="larger-text-tmp">[TextBox]</span>
+		</div>
+		<p class="description">You can use the textbox below to send me text that you want checked:</p>
+		<div class="textareaDiv">
+			<textarea placeholder="Click here to type..."></textarea>
+		</div>
+		<button class="larger-text">[Send]</button>
+		<div class="model-footer">
+			<div class="right-buttons">
+				<button class="larger-text">[Back to menu]</button>
+				<button class="larger-text">[Quit]</button>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

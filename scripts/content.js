@@ -45,15 +45,14 @@ document.addEventListener('mouseup', (event) => {
 function putMarker(x, y) {
     const marker = document.createElement('div');
     marker.setAttribute('id', 'anti-phishing-marker')
-    marker.innerHTML = `<img width="30" height="30" src="${chrome.runtime.getURL('../images/icon-128.png')}" alt="Check" />`;
+    marker.innerHTML = `<img width="38" src="${chrome.runtime.getURL('../images/icon-128.png')}" alt="Check" />`;
 
     marker.style.cssText = `
-      top: ${y}px;
-      left: ${x}px;
+      top: ${y + 5}px;
+      left: ${x + 5}px;
       position: fixed;
 
-      width: 30px;
-      height: 30px;
+      width: 38px;
 
       cursor: pointer;
     `;
