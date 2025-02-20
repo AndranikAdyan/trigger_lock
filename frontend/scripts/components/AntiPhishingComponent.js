@@ -23,8 +23,8 @@ class AntiPhishingComponent extends Component {
 	API_URI = 'http://127.0.0.1:8000/predict';
 
 	constructor() {
-	super();
-	this.root = this.attachShadow({ mode: 'closed' });
+		super();
+		this.root = this.attachShadow({ mode: 'closed' });
 	}
 
 	/**
@@ -34,7 +34,7 @@ class AntiPhishingComponent extends Component {
 	 * @returns {boolean}
 	 */
 	get isRenderable() {
-	return localStorage.getItem('anti-phishing-tip') !== '0';
+		return localStorage.getItem('anti-phishing-tip') !== '0';
 	}
 
 	/**
@@ -43,7 +43,7 @@ class AntiPhishingComponent extends Component {
 	 * @returns {string}
 	 */
 	getCss() {
-	return `
+		return `
 		<style>
 
 		@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
@@ -119,12 +119,27 @@ class AntiPhishingComponent extends Component {
 			background-color: #111;
 			border: none;
 			width: 350px;
+			max-height: 80vh;
 			padding: 25px 35px;
 			text-align: left;
 			border-radius: 30px;
 			box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
 			position: relative;
+			overflow-y: auto;
 		}
+
+		/* Style the scrollbar */
+		.modal::-webkit-scrollbar {
+			width: 8px;
+		}
+
+		/* Style the scrollbar thumb (the draggable part) */
+		.modal::-webkit-scrollbar-thumb {
+			background-color: rgb(57, 57, 57); /* Gray color for the thumb */
+			border-radius: 4px; /* Rounded corners */
+		}
+
+		/* Style the scrollbar */
 
 		.modal-header {
 			display: flex;
@@ -255,7 +270,6 @@ class AntiPhishingComponent extends Component {
 			border-radius: 50%;
 			animation: animation-loading 1s infinite linear;
 		}
-
 		@keyframes animation-loading {
 			from {
 				transform: rotate(0deg);
@@ -264,26 +278,7 @@ class AntiPhishingComponent extends Component {
 				transform: rotate(360deg);
 			}
 		}
-
-
 		</style>
-	`;
-	}
-
-	/**
-	 * Anti-phishing banner template
-	 *
-	 * @returns {string}
-	 */
-	template() {
-	return `
-		<div class="content">
-		Select a page segment and choose 'Anti-Phishing Check' from the context menu to verify security.
-		<a href="${this.WHY_URL}" target="_blank">
-			Why?
-		</a>
-		</div>
-		<anti-phishing-close></anti-phishing-close>
 	`;
 	}
 
@@ -294,35 +289,35 @@ class AntiPhishingComponent extends Component {
 	 * @returns {AntiPhishingComponent}
 	 */
 	render(content) {
-	this.root.innerHTML = this.createHTML(`
+		this.root.innerHTML = this.createHTML(`
 		${this.getCss()}
 		${content}
 	`);
-	return this;
+		return this;
 	}
 
 	/**
 	 * Callback when the element added to the page
 	 */
 	connectedCallback() {
-	document.addEventListener('CloseAntiPhishingTip', this.onClose.bind(this));
-	document.addEventListener('AntiPhishingChecking', this.onLoading.bind(this));
-	document.addEventListener('AntiPhishingChecked', this.onChecked.bind(this));
+		document.addEventListener('CloseAntiPhishingTip', this.onClose.bind(this));
+		document.addEventListener('AntiPhishingChecking', this.onLoading.bind(this));
+		document.addEventListener('AntiPhishingChecked', this.onChecked.bind(this));
 
-	if (!this.isRenderable) {
-		return;
-	}
+		if (!this.isRenderable) {
+			return;
+		}
 
-	this.render(this.template());
+		this.render(this.template());
 	}
 
 	/**
 	 * Callback when the element removed from the page
 	 */
 	disconnectedCallback() {
-	document.removeEventListener('CloseAntiPhishingTip', this.onClose.bind(this));
-	document.removeEventListener('AntiPhishingChecking', this.onLoading.bind(this));
-	document.removeEventListener('AntiPhishingChecked', this.onChecked.bind(this));
+		document.removeEventListener('CloseAntiPhishingTip', this.onClose.bind(this));
+		document.removeEventListener('AntiPhishingChecking', this.onLoading.bind(this));
+		document.removeEventListener('AntiPhishingChecked', this.onChecked.bind(this));
 	}
 
 	/**
@@ -337,36 +332,35 @@ class AntiPhishingComponent extends Component {
 	 * Rendering loading state
 	 */
 	onLoading() {
-	delete this.dataset.status;
-	/*
-		Sending POST request to the FastAPI server
-	*/
-	fetch(this.API_URI, {
-		method: 'POST',
-		headers: {
-		'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({
-		content: document.getSelection()?.toString() ?? '' // Extracting the selected text from the page
+		delete this.dataset.status;
+		/*
+			Sending POST request to the FastAPI server
+		*/
+		fetch(this.API_URI, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				content: document.getSelection()?.toString() ?? '' // Extracting the selected text from the page
+			})
 		})
-	})
-	.then(res => res.json())
-	.then(data => {
-		const isSave = data.prediction === 0; // Assuming 0 means safe, 1 means phishing
+			.then(res => res.json())
+			.then(data => {
+				const isSave = data.prediction === 0; // Assuming 0 means safe, 1 means phishing
 
-		const detail = {
-		isSave: isSave,
-		message: isSave ? 'Low' : 'High'
-		};
+				const detail = {
+					isSave: isSave,
+					message: isSave ? 'Low' : 'High'
+				};
 
-	document.dispatchEvent(new CustomEvent('AntiPhishingChecked', {
-		detail
-	}));
-	})
-	.catch(error => {
-		console.error("Error while checking phishing:", error);
-		// Handle errors (e.g., show an error message in the UI)
-	});
+				document.dispatchEvent(new CustomEvent('AntiPhishingChecked', {
+					detail
+				}));
+			})
+			.catch(error => {
+				console.error("Error while checking phishing:", error);
+			});
 	}
 
 	/**
@@ -374,21 +368,21 @@ class AntiPhishingComponent extends Component {
 	 *
 	 * @param event
 	 */
-  onChecked(event) {
-	const { isSave, message } = event.detail;
-	
-	this.dataset.status = isSave ? 'success' : 'warning';
-	function mockServerResponse() {
-		return new Promise(resolve => {
-			setTimeout(() => {
-				resolve(message);
-			}, 2000);
-		});
+	onChecked(event) {
+		const { isSave, message } = event.detail;
+
+		this.dataset.status = isSave ? 'success' : 'warning';
+		function mockServerResponse() {
+			return new Promise(resolve => {
+				setTimeout(() => {
+					resolve(message);
+				}, 2000);
+			});
+		}
+
+		// Call successMessage with the mock function
+		this.Message(mockServerResponse);
 	}
-	
-	// Call successMessage with the mock function
-	this.Message(mockServerResponse);
-  }
 
 	/**
 	 * Rendering success state
@@ -396,12 +390,12 @@ class AntiPhishingComponent extends Component {
 	 * @param message
 	 */
 	async Message(fetchAnalysis) {
-	// Show loading state immediately
-	this.render(`
+		// Show loading state immediately
+		this.render(`
 		<div class="modal">
 			<div class="modal-header">
 				<button class="close">&times;</button>
-				<span class="title">[Analysis Results]</span>
+				<span class="larger-text-tmp">[Analysis Results]</span>
 			</div>
 			<p class="description">
 				<p>Thank you for your input.</p	>
@@ -410,15 +404,15 @@ class AntiPhishingComponent extends Component {
 		</div>
 	`);
 
-	// Attach event listener to close button
-	this.root.querySelector(".close").addEventListener("click", () => this.onClose());
+		// Attach event listener to close button
+		this.root.querySelector(".close").addEventListener("click", () => this.onClose());
 
-	try {
-		// Wait for the response from the server
-		const message = await fetchAnalysis();
+		try {
+			// Wait for the response from the server
+			const message = await fetchAnalysis();
 
-		// Update the UI with the actual result
-		this.render(`
+			// Update the UI with the actual result
+			this.render(`
 			<div class="modal">
 				<div class="modal-header">
 					<button class="close">&times;</button>
@@ -437,17 +431,17 @@ class AntiPhishingComponent extends Component {
 			</div>
 		`);
 
-		// Attach event listeners after rendering
-		this.root.querySelector(".close").addEventListener("click", () => this.onClose());
-		this.root.querySelector(".quit").addEventListener("click", () => this.onClose());
-		this.root.querySelector(".main-menu").addEventListener("click", () => this.showMainMenu());
+			// Attach event listeners after rendering
+			this.root.querySelector(".close").addEventListener("click", () => this.onClose());
+			this.root.querySelector(".quit").addEventListener("click", () => this.onClose());
+			this.root.querySelector(".main-menu").addEventListener("click", () => this.showMainMenu());
 
-	} catch (error) {
-		this.render(`
+		} catch (error) {
+			this.render(`
 			<div class="modal">
 				<div class="modal-header">
 					<button class="close">&times;</button>
-					<span class="title">[Analysis Results]</span>
+					<span class="larger-text-tmp">[Analysis Results]</span>
 				</div>
 				<p class="description">
 					<p>Sorry, an error occurred while fetching the analysis.</p>
@@ -455,32 +449,59 @@ class AntiPhishingComponent extends Component {
 			</div>
 		`);
 
-		this.root.querySelector(".close").addEventListener("click", () => this.onClose());
+			this.root.querySelector(".close").addEventListener("click", () => this.onClose());
+		}
 	}
-}
 
-showMainMenu() {
-	this.render(`
-		<div class="modal">
-			<div class="modal-header">
-				<button class="close">&times;</button>
-				<span class="larger-text-tmp">[Main Screen]</span>
+	showMainMenu() {
+		this.render(`
+			<div class="modal">
+				<div class="modal-header">
+					<button class="close">&times;</button>
+					<span class="larger-text-tmp">[Main Screen]</span>
+				</div>
+				<div class="description">
+					<p>Good day to you. I am <span class="highlight">Lock</span>.</p>
+					<p>My assignment is to help you stay safe from social engineering attacks. Aside from a <span class="highlight">knowledge base</span> that I have prepared for you, I am also capable of analysing texts and determining the possibility of them being malicious.</p>
+					<p>Please, do keep in mind that I am a machine and I cannot perceive context, so I highly suggest you make use of both my analysis and the knowledge.</p>
+					<p>Where do you want to go now?</p>
+				</div>
+				<div class="right-buttons">
+					<button class="about">[About Me]</button>
+					<button class="quit">[Quit]</button>
+				</div>
 			</div>
-			<div class="description">
-				<p>Good day to you. I am <span class="highlight">Lock</span>.</p>
-				<p>My assignment is to help you stay safe from social engineering attacks. Aside from a <span class="highlight">knowledge base</span> that I have prepared for you, I am also capable of analysing texts and determining the possibility of them being malicious.</p>
-				<p>Please, do keep in mind that I am a machine and I cannot perceive context, so I highly suggest you make use of both my analysis and the knowledge.</p>
-				<p>Where do you want to go now?</p>
-			</div>
-			<div class="right-buttons">
-				<button class="quit">[Quit]</button>
-			</div>
-		</div>
-	`);
+		`);
 
-	this.root.querySelector(".close").addEventListener("click", () => this.onClose());
-	this.root.querySelector(".quit").addEventListener("click", () => this.onClose());
-}
+		this.root.querySelector(".close").addEventListener("click", () => this.onClose());
+		this.root.querySelector(".quit").addEventListener("click", () => this.onClose());
+		this.root.querySelector(".about").addEventListener("click", () => this.showAbout());
+	}
+
+	showAbout() {
+		this.render(`
+			<div class="modal">
+				<div class="modal-header">
+					<button class="close">&times;</button>
+					<span class="title">[About Trigger_Lock]</span>
+				</div>
+
+				<p class="description">// My name is Lock. I am a service, created to help combat the threat of social engineering, by IPV Team, during the CyberTech Sprint in Tumo Labs.</p>
+				<p class="description">
+					<br> // My code is fully open-source, if you would like to take a look.
+				</p>
+
+				<div class="right-buttons">
+					<button class="main-menu">[Main Menu]</button>
+					<button class="quit">[Quit]</button>
+				</div>
+			</div>
+		`);
+
+		this.root.querySelector(".close").addEventListener("click", () => this.onClose());
+		this.root.querySelector(".quit").addEventListener("click", () => this.onClose());
+		this.root.querySelector(".main-menu").addEventListener("click", () => this.showMainMenu());
+	}
 
 }
 

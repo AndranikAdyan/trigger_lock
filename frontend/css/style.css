@@ -6,7 +6,6 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	height: 100vh;
 	margin: 0;
 	font-family: 'Space Mono', serif;
 	color: white;
@@ -173,4 +172,24 @@ button:active {
 .highlight {
 	text-decoration: underline;
 	text-decoration-color: #4199f3;
+}
+
+/* loading */
+.loading-spinner {
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	border: 3px solid rgba(255, 255, 255, 0.3);
+	border-top-color: #fff;
+	border-radius: 50%;
+	animation: animation-loading 1s infinite linear;
+}
+
+@keyframes animation-loading {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
 }
