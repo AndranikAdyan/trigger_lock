@@ -115,7 +115,7 @@ class AntiPhishingComponent extends Component {
 			font-style: italic;
 		}
 
-		.model {
+		.modal {
 			background-color: #111;
 			border: none;
 			width: 350px;
@@ -126,7 +126,7 @@ class AntiPhishingComponent extends Component {
 			position: relative;
 		}
 
-		.model-header {
+		.modal-header {
 			display: flex;
 			justify-content: space-between;
 			font-weight: bold;
@@ -398,8 +398,8 @@ class AntiPhishingComponent extends Component {
 	async Message(fetchAnalysis) {
 	// Show loading state immediately
 	this.render(`
-		<div class="model">
-			<div class="model-header">
+		<div class="modal">
+			<div class="modal-header">
 				<button class="close">&times;</button>
 				<span class="title">[Analysis Results]</span>
 			</div>
@@ -419,8 +419,8 @@ class AntiPhishingComponent extends Component {
 
 		// Update the UI with the actual result
 		this.render(`
-			<div class="model">
-				<div class="model-header">
+			<div class="modal">
+				<div class="modal-header">
 					<button class="close">&times;</button>
 					<span class="larger-text-tmp">[Analysis Results]</span>
 				</div>
@@ -444,8 +444,8 @@ class AntiPhishingComponent extends Component {
 
 	} catch (error) {
 		this.render(`
-			<div class="model">
-				<div class="model-header">
+			<div class="modal">
+				<div class="modal-header">
 					<button class="close">&times;</button>
 					<span class="title">[Analysis Results]</span>
 				</div>
@@ -461,8 +461,8 @@ class AntiPhishingComponent extends Component {
 
 showMainMenu() {
 	this.render(`
-		<div class="model">
-			<div class="model-header">
+		<div class="modal">
+			<div class="modal-header">
 				<button class="close">&times;</button>
 				<span class="larger-text-tmp">[Main Screen]</span>
 			</div>
