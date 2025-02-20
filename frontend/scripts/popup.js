@@ -5,7 +5,7 @@ const API_URI = 'http://127.0.0.1:8000/predict';
 document.addEventListener("DOMContentLoaded", () => {
 	const $field = document.querySelector('textarea');
 	const $checkButton = document.querySelector('.larger-text');
-	const $modal = document.querySelector('.model');
+	const $modal = document.querySelector('.modal');
 
 	attachCloseEvent();
 	attachQuitEvent();
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	function showLoadingState() {
 		$modal.innerHTML = `
-			<div class="model-header">
+			<div class="modal-header">
 				<button class="close">&times;</button>
 				<span class="title">[Analysis Results]</span>
 			</div>
@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	function showResult(message) {
 		$modal.innerHTML = `
-			<div class="model-header">
+			<div class="modal-header">
 				<button class="close">&times;</button>
 				<span class="larger-text-tmp">[Analysis Results]</span>
 			</div>
@@ -67,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	function showError() {
 		$modal.innerHTML = `
-			<div class="model-header">
+			<div class="modal-header">
 				<button class="close">&times;</button>
 				<span class="title">[Error]</span>
 			</div>
@@ -86,9 +86,9 @@ document.addEventListener("DOMContentLoaded", () => {
 	}
 
 	function attachQuitEvent() {
-		const closeButton = document.querySelector('.quit');
-		if (closeButton) {
-			closeButton.addEventListener('click', () => {
+		const quitButton = document.querySelector('.quit');
+		if (quitButton) {
+			quitButton.addEventListener('click', () => {
 				window.close()
 			});
 		}
@@ -96,21 +96,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
 	function attachMenuEvent() {
 		const mainMenuButton = document.querySelector('.main-menu');
-		const quitButton = document.querySelector('.quit');
-
 		if (mainMenuButton) {
 			mainMenuButton.addEventListener('click', showMainMenu);
 		}
-		if (quitButton) {
-			quitButton.addEventListener('click', () => {
-				$modal.style.display = 'none';
-			});
+	}
+
+	function attachAboutMeEvent() {
+		const mainMenuButton = document.querySelector('.about');
+		if (mainMenuButton) {
+			mainMenuButton.addEventListener('click', showAbout);
 		}
 	}
 
 	function showMainMenu() {
 		$modal.innerHTML = `
-			<div class="model-header">
+			<div class="modal-header">
 				<button class="close">&times;</button>
 				<span class="larger-text-tmp">[Main Screen]</span>
 			</div>
@@ -121,10 +121,35 @@ document.addEventListener("DOMContentLoaded", () => {
 				<p>Where do you want to go now?</p>
 			</div>
 			<div class="right-buttons">
+				<button class="about">[About Me]</button>
 				<button class="quit">[Quit]</button>
 			</div>
 		`;
 		attachQuitEvent();
 		attachCloseEvent();
+		attachAboutMeEvent();
+	}
+
+	function showAbout() {
+		$modal.innerHTML = `
+			<div class="modal-header">
+				<button class="close">&times;</button>
+				<span class="title">[About Trigger_Lock]</span>
+			</div>
+
+			<p class="description">// My name is Lock. I am a service, created to help combat the threat of social engineering, by IPV Team, during the CyberTech Sprint in Tumo Labs.</p>
+			<p class="description">
+				<br> // My code is fully open-source, if you would like to take a look.
+			</p>
+
+			<div class="right-buttons">
+				<button class="main-menu">[Main Menu]</button>
+				<button class="quit">[Quit]</button>
+			</div>
+		`;
+
+		this.root.querySelector(".close").addEventListener("click", () => this.onClose());
+		this.root.querySelector(".quit").addEventListener("click", () => this.onClose());
+		this.root.querySelector(".main-menu").addEventListener("click", () => this.showMainMenu());
 	}
 });
