@@ -8,43 +8,43 @@ import Component from './Component.js';
  * @class AntiPhishingComponent
  */
 class AntiPhishingComponent extends Component {
-  /**
-   * URL for more information about phishing
-   *
-   * @type {string}
-   */
-  WHY_URL = 'https://www.proofpoint.com/us/threat-reference/phishing';
+	/**
+	 * URL for more information about phishing
+	 *
+	 * @type {string}
+	 */
+	WHY_URL = 'https://www.proofpoint.com/us/threat-reference/phishing';
 
-  /**
-   * Phishing status checker API URI (FastAPI server)
-   *
-   * @type {string}
-   */
-  API_URI = 'http://127.0.0.1:8000/predict';
+	/**
+	 * Phishing status checker API URI (FastAPI server)
+	 *
+	 * @type {string}
+	 */
+	API_URI = 'http://127.0.0.1:8000/predict';
 
-  constructor() {
+	constructor() {
 	super();
 	this.root = this.attachShadow({ mode: 'closed' });
-  }
+	}
 
-  /**
-   * This getter checks that banner anti-phishing tip
-   * should be shown on page reload.
-   *
-   * @returns {boolean}
-   */
-  get isRenderable() {
+	/**
+	 * This getter checks that banner anti-phishing tip
+	 * should be shown on page reload.
+	 *
+	 * @returns {boolean}
+	 */
+	get isRenderable() {
 	return localStorage.getItem('anti-phishing-tip') !== '0';
-  }
+	}
 
-  /**
-   * Anti-phishing banner styles
-   *
-   * @returns {string}
-   */
-  getCss() {
+	/**
+	 * Anti-phishing banner styles
+	 *
+	 * @returns {string}
+	 */
+	getCss() {
 	return `
-	  <style>
+		<style>
 
 		@import url('https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 		
@@ -185,7 +185,7 @@ class AntiPhishingComponent extends Component {
 			width: 100%;
 			height: 40px;
 			font-family: monospace;
-			background:  #111;
+			background: #111;
 			border: none;
 			text-align: end;
 			color: #4199f3;
@@ -266,77 +266,77 @@ class AntiPhishingComponent extends Component {
 		}
 
 
-	  </style>
+		</style>
 	`;
-  }
+	}
 
-  /**
-   * Anti-phishing banner template
-   *
-   * @returns {string}
-   */
-  template() {
+	/**
+	 * Anti-phishing banner template
+	 *
+	 * @returns {string}
+	 */
+	template() {
 	return `
-	  <div class="content">
+		<div class="content">
 		Select a page segment and choose 'Anti-Phishing Check' from the context menu to verify security.
 		<a href="${this.WHY_URL}" target="_blank">
-		  Why?
+			Why?
 		</a>
-	  </div>
-	  <anti-phishing-close></anti-phishing-close>
+		</div>
+		<anti-phishing-close></anti-phishing-close>
 	`;
-  }
+	}
 
-  /**
-   * Rendering anti-phishing banner by content
-   *
-   * @param content
-   * @returns {AntiPhishingComponent}
-   */
-  render(content) {
+	/**
+	 * Rendering anti-phishing banner by content
+	 *
+	 * @param content
+	 * @returns {AntiPhishingComponent}
+	 */
+	render(content) {
 	this.root.innerHTML = this.createHTML(`
-	  ${this.getCss()}
-	  ${content}
+		${this.getCss()}
+		${content}
 	`);
 	return this;
-  }
+	}
 
-  /**
-   * Callback when the element added to the page
-   */
-  connectedCallback() {
+	/**
+	 * Callback when the element added to the page
+	 */
+	connectedCallback() {
 	document.addEventListener('CloseAntiPhishingTip', this.onClose.bind(this));
 	document.addEventListener('AntiPhishingChecking', this.onLoading.bind(this));
 	document.addEventListener('AntiPhishingChecked', this.onChecked.bind(this));
 
 	if (!this.isRenderable) {
-	  return;
+		return;
 	}
 
 	this.render(this.template());
-  }
+	}
 
-  /**
-   * Callback when the element removed from the page
-   */
-  disconnectedCallback() {
+	/**
+	 * Callback when the element removed from the page
+	 */
+	disconnectedCallback() {
 	document.removeEventListener('CloseAntiPhishingTip', this.onClose.bind(this));
 	document.removeEventListener('AntiPhishingChecking', this.onLoading.bind(this));
 	document.removeEventListener('AntiPhishingChecked', this.onChecked.bind(this));
-  }
+	}
 
-  /**
-   * On closing we are removing the content but element should
-   * stay in the page
-   */
-  onClose() {
-	this.root.innerHTML = this.createHTML('');
-  }
+	/**
+	 * On closing we are removing the content but element should
+	 * stay in the page
+	 */
+	onClose() {
+		this.root.innerHTML = this.createHTML('');
+	}
 
-  /**
-   * Rendering loading state
-   */
-  onLoading() {
+	/**
+	 * Rendering loading state
+	 */
+	onLoading() {
 	delete this.dataset.status;
 	/*
 		Sending POST request to the FastAPI server
@@ -364,19 +364,19 @@ class AntiPhishingComponent extends Component {
 	}));
 	})
 	.catch(error => {
-	  console.error("Error while checking phishing:", error);
-	  // Handle errors (e.g., show an error message in the UI)
+		console.error("Error while checking phishing:", error);
+		// Handle errors (e.g., show an error message in the UI)
 	});
-  }
+	}
 
-  /**
-   * Rendering conditional status states
-   *
-   * @param event
-   */
+	/**
+	 * Rendering conditional status states
+	 *
+	 * @param event
+	 */
   onChecked(event) {
 	const { isSave, message } = event.detail;
-
+	
 	this.dataset.status = isSave ? 'success' : 'warning';
 	function mockServerResponse() {
 		return new Promise(resolve => {
@@ -390,12 +390,12 @@ class AntiPhishingComponent extends Component {
 	this.Message(mockServerResponse);
   }
 
-  /**
-   * Rendering success state
-   *
-   * @param message
-   */
-  async Message(fetchAnalysis) {
+	/**
+	 * Rendering success state
+	 *
+	 * @param message
+	 */
+	async Message(fetchAnalysis) {
 	// Show loading state immediately
 	this.render(`
 		<div class="model">
@@ -481,8 +481,6 @@ showMainMenu() {
 	this.root.querySelector(".close").addEventListener("click", () => this.onClose());
 	this.root.querySelector(".quit").addEventListener("click", () => this.onClose());
 }
-
-
 
 }
 

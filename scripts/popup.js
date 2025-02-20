@@ -1,30 +1,79 @@
-const API_URI = 'https://echo.free.beeceptor.com';
+"use strict";
 
-const $field = document.querySelector('#field');
-const $checkButton = document.querySelector('#check');
+const API_URI = 'http://127.0.0.1:8000/predict';
 
-$checkButton.onclick = () => {
-    delete document.body.dataset.status;
+document.addEventListener("DOMContentLoaded", () => {
+    const $field = document.querySelector('textarea');
+    const $checkButton = document.querySelector('.larger-text');
+    const $modal = document.querySelector('.model');
+    
+    $checkButton.addEventListener('click', async () => {
+        if (!$field.value.trim()) return;
+        
+        showLoadingState();
+        
+        try {
+            const response = await fetch(API_URI, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: $field.value })
+            });
+            const data = await response.json();
+            
+            const isSafe = data.prediction === 0; // Assuming 0 means safe, 1 means phishing
+            showResult(isSafe ? 'Low' : 'High');
+        } catch (error) {
+            showError();
+        }
+    });
 
-    $checkButton.classList.add('loading');
+    function showLoadingState() {
+        $modal.innerHTML = `
+            <div class="model-header">
+                <button class="close">&times;</button>
+                <span class="title">[Analysis Results]</span>
+            </div>
+            <p class="description">
+                <p>Analyzing... <span class="loading-spinner"></span></p>
+            </p>
+        `;
+        attachCloseEvent();
+    }
 
-    fetch(API_URI, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          pageUrl: null,
-          text: $field.value ?? '',
-        })
-      })
-      .then(res => res.json())
-      .then(() => {
-        setTimeout(() => {
-            const isStatus = Math.random() < 0.5;
+    function showResult(message) {
+        $modal.innerHTML = `
+            <div class="model-header">
+                <button class="close">&times;</button>
+                <span class="larger-text-tmp">[Analysis Results]</span>
+            </div>
+            <div class="description">
+                <p>Thank you for your input.</p>
+                <p>According to my analysis, the text you provided has a <span class="highlight">${message}</span> chance of being malicious.</p>
+                <p>Please, do keep in mind that I am a machine and I cannot perceive context, so I highly suggest you make use of both my analysis and the knowledge.</p>
+                <p>Where would you like to go now?</p>
+            </div>
+            <div class="right-buttons">
+                <button class="main-menu">[Main menu]</button>
+                <button class="quit">[Quit]</button>
+            </div>
+        `;
+        attachCloseEvent();
+    }
 
-            $checkButton.classList.remove('loading');
-            document.body.dataset.status = isStatus ? 'success' : 'warning';
-        }, 2000)
-      })
-}
+    function showError() {
+        $modal.innerHTML = `
+            <div class="model-header">
+                <button class="close">&times;</button>
+                <span class="title">[Error]</span>
+            </div>
+            <p class="description">Sorry, an error occurred while fetching the analysis.</p>
+        `;
+        attachCloseEvent();
+    }
+
+    function attachCloseEvent() {
+        document.querySelector('.close').addEventListener('click', () => {
+            $modal.innerHTML = '';
+        });
+    }
+});
