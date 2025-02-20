@@ -5,7 +5,7 @@ const API_URI = 'http://127.0.0.1:8000/predict';
 document.addEventListener("DOMContentLoaded", () => {
 	const $field = document.querySelector('textarea');
 	const $checkButton = document.querySelector('.larger-text');
-	const $modal = document.querySelector('.modal');
+	const $modal = document.querySelector('.model');
 		
 	$checkButton.addEventListener('click', async () => {
 		if (!$field.value.trim()) return;
