@@ -147,9 +147,8 @@ document.addEventListener("DOMContentLoaded", () => {
 				<button class="quit">[Quit]</button>
 			</div>
 		`;
-
-		this.root.querySelector(".close").addEventListener("click", () => this.onClose());
-		this.root.querySelector(".quit").addEventListener("click", () => this.onClose());
-		this.root.querySelector(".main-menu").addEventListener("click", () => this.showMainMenu());
+		attachQuitEvent();
+		attachCloseEvent();
+		attachMenuEvent();
 	}
 });
