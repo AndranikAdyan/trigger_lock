@@ -32,7 +32,6 @@ def predict_email(email: EmailContent):
 		cleaned_text = clean_text(email.content)
 		text_features = vectorizer.transform([cleaned_text])
 		prediction = svm_model.predict(text_features)
-		print(int(prediction))
 		return {"prediction": int(prediction)}
 
 	except Exception as e:
